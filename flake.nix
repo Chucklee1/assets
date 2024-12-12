@@ -7,7 +7,7 @@
     pkgs = import nixpkgs { ${system} = "x86_64-linux"; };
     scriptName = "lazyInstaller";
     buildInputs = with pkgs; [ parted nixos-install nixos-enter ];
-    scriptDef = pkgs.writeShellScriptBin scriptName ./install.sh;
+    scriptDef = pkgs.writeShellScriptBin scriptName ./test.sh;
 
   in {
     defaultPackage.${system} = self.packages.${system}.${script-name};

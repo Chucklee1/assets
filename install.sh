@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # get disk name
 echo "enter the disk name (eg: sdx, nvme): "
 read DISK
