@@ -4,7 +4,7 @@
   outputs = { self, nixpkgs }: 
   let 
     system = "x86_64-linux";
-    pkgs = import nixpkgs { ${system} = "x86_64-linux"; };
+    pkgs = import nixpkgs { system = system; };
     scriptName = "lazyInstaller";
     buildInputs = with pkgs; [ parted nixos-install nixos-enter ];
     scriptDef = pkgs.writeShellScriptBin scriptName ./test.sh;
