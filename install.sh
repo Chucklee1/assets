@@ -31,7 +31,7 @@ nixos-generate-config --root /mnt
 
 
 echo "copying nix config to root"
-cp ./config.nix /mnt/etc/configuration.nix
+cp g /mnt/etc/configuration.nix
 
 echo "installing nixos"
 nixos-install

@@ -1,16 +1,23 @@
 {
   description = "lazy installer";
 
-  outputs = { self, nixpkgs }: {
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.my-script;
+  outputs = { self, nixpkgs }: 
+  let 
+    system = "x86_64-linux";
+    pkgs = import nixpkgs { ${system} = "x86_64-linux"; };
+    scriptName = "lazyInstaller";
+    buildInputs = with pkgs; [ parted nixos-install nixos-enter ];
+    scriptDef = pkgs.writeShellScriptBin scriptName ./install.sh;
 
-    packages.x86_64-linux.my-script =
-      let
-        pkgs = import nixpkgs { system = "x86_64-linux"; };
-      in
-      pkgs.writeShellScriptBin "my-script" ''
-        DATE="$(${pkgs.ddate}/bin/ddate +'the %e of %B%, %Y')"
-        ${pkgs.cowsay}/bin/cowsay Hello, world! Today is $DATE.
-      '';
+  in {
+    defaultPackage.${system} = self.packages.${system}.${script-name};
+
+    packages.${system}.${script-name} = 
+      pkgs.symlinkJoin {
+      name = scriptName;
+      paths = [ scriptDef ] ++ buildInputs;
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = "wrapProgram $out/bin/${scriptName} --prefix PATH : $out/bin";
+    };
   };
 }
